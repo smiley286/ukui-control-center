@@ -22,6 +22,7 @@ SUBDIRS = \
           network/vpn \
           network/proxy \
           account/userinfo \
+          account/Testify \
           security-updates/backup \
           messages-task/about \
           time-language/datetime \
