@@ -17,8 +17,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  */
-#ifndef PRINTER_H
-#define PRINTER_H
+#ifndef NETWORKACCOUNT_H
+#define NETWORKACCOUNT_H
 
 
 #include <QObject>
@@ -52,4 +52,4 @@ private:
     QWidget * pluginWidget;
 };
 
-#endif // PRINTER_H
+#endif // NETWORKACCOUNT_H

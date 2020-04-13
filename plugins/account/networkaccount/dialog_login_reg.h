@@ -19,7 +19,7 @@
 #include "passdialog.h"
 #include <QTimer>
 #include <QSizePolicy>
-#include <libkylinssoclient/libkylinssoclient.h>
+#include <libkylin-sso-client/include/libkylinssoclient.h>
 #include <QShortcut>
 
 class Dialog_login_reg : public QWidget
@@ -33,6 +33,7 @@ public:
     int             timerout_num_log = 60;
     QString         messagebox(int code);
     void            set_client(libkylinssoclient *c);
+    QPushButton     *get_login_submit();
 
 public slots:
     void linked_forget_btn();

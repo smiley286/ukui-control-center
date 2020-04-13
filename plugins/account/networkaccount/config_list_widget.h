@@ -15,7 +15,7 @@
 #include <QMessageBox>
 #include "editpassdialog.h"
 #include "config_file.h"
-#include <libkylinssoclient/libkylinssoclient.h>
+#include <libkylin-sso-client/include/libkylinssoclient.h>
 
 class config_list_widget : public QWidget
 {
@@ -35,7 +35,7 @@ protected:
 private:
     item_list       *list;
     QString         qss_btn_str = "QPushButton#status[is_on=false]{font-size:14px;background-color: #3D6BE5;border-radius: 4px;color:#FFFFFF;}"
-                          "QPushButton#status[is_on=true] {font-size:14px;position:relative;color:#FFFFFF;border-radius:4px;background-color: #3D6BE5}"
+                          "QPushButton#status[is_on=true] {border-radius:4px;background-color: #3D6BE5}"
                           "QPushButton#status[is_on=false]:hover {font-size:14px;background-color: #415FC4;border-radius: 4px;position:relative;color:#FFFFFF;}"
                           "QPushButton#status[is_on=false]:click {font-size:14px;background-color: #415FC4;border-radius: 4px;postion:realative;color:#FFFFFF;}";
     network_item    *auto_syn;
@@ -77,7 +77,7 @@ public slots:
     void            on_switch_button(int on,int id);
     void            on_auto_syn(int on,int id);
 signals:
-
+    void sent_to_thread(libkylinssoclient *cl);
 };
 
 #endif // CONFIG_LIST_WIDGET_H

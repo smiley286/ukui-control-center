@@ -9,8 +9,8 @@ config_list_widget::config_list_widget(QWidget *parent) : QWidget(parent) {
     code = client->check_login();
     init_gui();
     if(code != "" && code !="201" && code != "203") {
-        client->init_oss();
         connect(client,SIGNAL(finished_init_oss(int)),this,SLOT(finished_load(int)));
+        client->init_oss();
     } else {
         stacked_widget->setCurrentWidget(null_widget);
     }
@@ -89,7 +89,6 @@ void config_list_widget::init_gui() {
     setContentsMargins(0,0,0,0);
     setMinimumSize(550,850);
     setMaximumSize(960,1140);
-    adjustSize();
     exit_page->setMinimumSize(120,36);
     exit_page->setMaximumSize(120,36);
     exit_page->resize(120,36);
@@ -166,12 +165,15 @@ void config_list_widget::init_gui() {
 
     pm_step = new QMovie(":/new/image/sign-in.gif");
 
-    login->setProperty("objectName","status");  //give object a name
-    login->setStyleSheet(qss_btn_str);
+    login->setProperty("objectName","login");  //give object a name
+    login->setStyleSheet("QPushButton#login[is_on=false]{font-size:14px;background-color: #3D6BE5;border-radius: 4px;color:#FFFFFF;}"
+                         "QPushButton#login[is_on=true] {border-radius:4px;background-color: #3D6BE5}"
+                         "QPushButton#login[is_on=false]:hover {font-size:14px;background-color: #415FC4;border-radius: 4px;position:relative;color:#FFFFFF;}"
+                         "QPushButton#login[is_on=false]:click {font-size:14px;background-color: #415FC4;border-radius: 4px;postion:realative;color:#FFFFFF;}");
     login->setProperty("is_on",false);
 
     gif_step->setStyleSheet("border-radius:4px;border:none;");
-    gif_step->setFixedSize(120,36);
+    gif_step->resize(120,36);
 
     title2->setText(tr("同步你的设置"));
     title2->setStyleSheet("font-size:18px;color:rgba(0,0,0,0.85);font-weight:500;");
@@ -194,7 +196,7 @@ void config_list_widget::init_gui() {
     container->adjustSize();
     list->adjustSize();
 
-
+    this->setStyleSheet("QWidget{background-color:#ffffff;}");
     exit_page->setFocusPolicy(Qt::NoFocus);
 
     //connect(auto_syn->get_swbtn(),SIGNAL(status(int,int)),this,SLOT(on_auto_syn(int,int)));
@@ -202,6 +204,7 @@ void config_list_widget::init_gui() {
     //Connect
     QWidget::connect(edit,SIGNAL(clicked()),this,SLOT(neweditdialog()));
     QWidget::connect(exit_page,SIGNAL(clicked()),this,SLOT(on_login_out()));
+    adjustSize();
     for(int btncnt = 0;btncnt < list->get_list().size();btncnt ++) {
         connect(list->get_item(btncnt)->get_swbtn(),SIGNAL(status(int,int)),this,SLOT(on_switch_button(int,int)));
     }
@@ -221,21 +224,24 @@ void config_list_widget::on_login() {
 }
 
 void config_list_widget::set_login_process() {
-    logout->hide();
 
     if(login->property("is_on") == false) {
-        gif_step->show();
+        login->setText("");
         login->setProperty("is_on",true);
-        pm_step->start();
+
         gif_step->setMovie(pm_step);
-        login->update();
+        pm_step->start();
+        gif_step->show();
+        //login->update();
     }
+    logout->hide();
 }
 
 void config_list_widget::open_cloud() {
     code = client->check_login();
-    client->init_oss();
     connect(client,SIGNAL(finished_init_oss(int)),this,SLOT(finished_load(int)));
+    client->init_oss();
+
 }
 
 void config_list_widget::finished_load(int ret) {
@@ -279,11 +285,11 @@ void config_list_widget::on_auto_syn(int on,int id) {
 }
 
 void config_list_widget::on_login_out() {
-    login->setProperty("objectName","status");  //give object a name
-    login->setStyleSheet(qss_btn_str);
     login->setProperty("is_on",false);
+    login->setText(tr("登录/注册"));
+    login->style()->unpolish(login);
+    login->style()->polish(login);
     gif_step->hide();
-    pm_step->stop();
     client->logout();
     stacked_widget->setCurrentWidget(null_widget);
     logout->show();

@@ -2,6 +2,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+
 TEMPLATE = lib
 CONFIG += c++11
 CONFIG += plugin
@@ -72,9 +73,9 @@ TRANSLATIONS += \
     networkaccount_zh_CN.ts
 
 # Default rules for deployment.
-#qnx: target.path = /tmp/$${TARGET}/bin
-#else: unix:!android: target.path = /opt/$${TARGET}/bin
-#!isEmpty(target.path): INSTALLS += target
+qnx: target.path = /tmp/$${TARGET}/bin
+else: unix:!android: target.path = /opt/$${TARGET}/bin
+!isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
     image/Delete.qrc \
@@ -83,8 +84,7 @@ RESOURCES += \
 
 DISTFILES += \
 
+unix:!macx: LIBS += -L$$[QT_INSTALL_LIBS]  -lkylinssoclient
 
-unix:!macx: LIBS += -L/usr/lib/libkylinssoclient/ -llibkylinssoclient
-
-INCLUDEPATH += /usr/lib/libkylinssoclient
-DEPENDPATH += /usr/lib/libkylinssoclient
+INCLUDEPATH += $$[QT_INSTALL_LIBS]
+DEPENDPATH += $$[QT_INSTALL_LIBS]

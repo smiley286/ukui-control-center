@@ -164,6 +164,10 @@ Dialog_login_reg::Dialog_login_reg(QWidget *parent) : QWidget(parent)
     del_btn->raise();
 }
 
+QPushButton * Dialog_login_reg::get_login_submit() {
+    return login_submit;
+}
+
 void Dialog_login_reg::set_client(libkylinssoclient *c) {
     client = c;
 }
@@ -214,6 +218,7 @@ void Dialog_login_reg::on_login_btn() {
         setshow(stack_box);
         return ;
     }
+    emit on_login_process();
     if(box_login->get_user_name() != "" && box_login->get_user_pass() != "" && box_login->get_stack_widget()->currentIndex() == 0){
         char name[32],pass[32];
         qstrcpy(name,box_login->get_user_name().toStdString().c_str());
@@ -222,7 +227,6 @@ void Dialog_login_reg::on_login_btn() {
         if(ret  == 0) {
             connect(client,SIGNAL(finished_login(int)),this,SLOT(on_login_finished(int)));
         }
-        emit on_login_process();
 
     } else if(box_login->get_user_name() != "" && box_login->get_login_code()->text() != "" && box_login->get_stack_widget()->currentIndex() == 1) {
         char phone[32],mcode[5];
@@ -232,7 +236,6 @@ void Dialog_login_reg::on_login_btn() {
         if(ret == 0) {
             connect(client,SIGNAL(finished_user_phone_login(int)),this,SLOT(on_login_finished(int)));
         }
-        emit on_login_process();
         qDebug()<<phone<<mcode;
     } else {
         if(box_login->get_stack_widget()->currentIndex() == 0) {

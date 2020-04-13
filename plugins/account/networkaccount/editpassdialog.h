@@ -12,7 +12,7 @@
 #include <QtMath>
 #include <QMouseEvent>
 #include <QTimer>
-#include <libkylinssoclient/libkylinssoclient.h>
+#include <libkylin-sso-client/include/libkylinssoclient.h>
 
 class EditPassDialog : public QWidget
 {

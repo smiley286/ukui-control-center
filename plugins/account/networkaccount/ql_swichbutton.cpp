@@ -1,4 +1,5 @@
 #include "ql_swichbutton.h"
+#include <QDebug>
 
 QL_SwichButton::QL_SwichButton(QWidget *parent) : QWidget(parent) {
     setMaximumSize(48,24);
