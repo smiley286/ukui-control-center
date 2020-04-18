@@ -247,7 +247,7 @@ void config_list_widget::init_gui() {
     list->adjustSize();
     container->adjustSize();
 
-    this->setStyleSheet("config_list_widget{background-color:#ffffff;}");
+    //this->setStyleSheet("config_list_widget{background-color:#ffffff;}");
     exit_page->setFocusPolicy(Qt::NoFocus);
 
     connect(auto_syn->get_swbtn(),SIGNAL(status(int,int)),this,SLOT(on_auto_syn(int,int)));
