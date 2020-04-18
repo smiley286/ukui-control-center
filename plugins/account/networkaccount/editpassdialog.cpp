@@ -186,7 +186,7 @@ EditPassDialog::EditPassDialog(QWidget *parent) : QWidget(parent)
     connect(this,SIGNAL(code_changed()),this,SLOT(setstyleline()));
     connect(success->back_login,SIGNAL(clicked()),this,SLOT(on_close()));
 
-    setStyleSheet("EditPassDialog{border-radius:6px;}");
+    //setStyleSheet("EditPassDialog{border-radius:6px;}");
     setAttribute(Qt::WA_TranslucentBackground, true);
     setWindowFlag(Qt::FramelessWindowHint);
     setWindowModality(Qt::ApplicationModal);
