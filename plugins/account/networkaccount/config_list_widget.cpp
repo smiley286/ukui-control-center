@@ -187,7 +187,7 @@ void config_list_widget::init_gui() {
     cvlayout->addSpacing(16);
     cvlayout->addWidget(list);
     container->setLayout(cvlayout);
-    container->setStyleSheet("QWidget{background-color:#ffffff;}");
+    //container->setStyleSheet("QWidget{background-color:#ffffff;}");
 
     null_widget = new QWidget(this);
     vlayout = new QVBoxLayout;
@@ -241,7 +241,7 @@ void config_list_widget::init_gui() {
     null_widget->setLayout(vlayout);
     null_widget->adjustSize();
     stacked_widget->addWidget(null_widget);
-    null_widget->setStyleSheet("QWidget{background-color:#ffffff;}");
+    //null_widget->setStyleSheet("QWidget{background-color:#ffffff;}");
     vboxlayout->addWidget(stacked_widget);
     this->setLayout(vboxlayout);
     list->adjustSize();
