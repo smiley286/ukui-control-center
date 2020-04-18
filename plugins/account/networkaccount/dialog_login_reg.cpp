@@ -107,7 +107,7 @@ Dialog_login_reg::Dialog_login_reg(QWidget *parent) : QWidget(parent)
 
     stack_box->setCurrentWidget(box_login);
 
-    setStyleSheet("Dialog_login_reg{border-radius:6px;}");
+    //setStyleSheet("Dialog_login_reg{border-radius:6px;}");
     setAttribute(Qt::WA_TranslucentBackground, true);
     setWindowFlag(Qt::FramelessWindowHint);
 
