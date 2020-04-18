@@ -1,3 +1,22 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ *
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ */
 #ifndef CONFIG_LIST_WIDGET_H
 #define CONFIG_LIST_WIDGET_H
 
@@ -27,17 +46,16 @@ public:
     QLabel*         get_info();
     QWidget*        get_login_dialog();
     void            setshow(QWidget *w);
-    void            set_client(libkylinssoclient *c);
     void            init_gui();
     void            handle_conf();
     bool            judge_item(QString enable,int cur);
 protected:
 private:
     item_list       *list;
-    QString         qss_btn_str = "QPushButton#status[is_on=false]{font-size:14px;background-color: #3D6BE5;border-radius: 4px;color:#FFFFFF;}"
+    QString         qss_btn_str = "QPushButton#status[is_on=false]{font-size:14px;background-color:#E7E7E7;border:none;border-radius: 4px;color:rgba(0,0,0,0.85);}"
                           "QPushButton#status[is_on=true] {border-radius:4px;background-color: #3D6BE5}"
-                          "QPushButton#status[is_on=false]:hover {font-size:14px;background-color: #415FC4;border-radius: 4px;position:relative;color:#FFFFFF;}"
-                          "QPushButton#status[is_on=false]:click {font-size:14px;background-color: #415FC4;border-radius: 4px;postion:realative;color:#FFFFFF;}";
+                          "QPushButton#status[is_on=false]:hover {font-size:14px;background-color:#E7E7E7;border:none;border-radius: 4px;color:rgba(61,107,229,0.85);}"
+                          "QPushButton#status[is_on=false]:click {font-size:14px;background-color:#E7E7E7;border:none;border-radius: 4px;color:rgba(65,95,196,0.85);}";
     network_item    *auto_syn;
     QLabel          *title;
     QLabel          *info;
@@ -65,8 +83,11 @@ private:
     QVBoxLayout         *cvlayout;
     QString             code;
     QString             home;
-    QStringList         mapid = {tr("ukui-menu"),tr("ukui-panel"),tr("ukui-panel2"),tr("ukui-control-center"),tr("indicator-china-weather"),tr("kylin-video")};
-
+    QStringList         mapid = {"wallpaper","ukui-menu","ukui-panel","ukui-panel2","ukui-control-center","indicator-china-weather","kylin-video"};
+    Dialog_login_reg*   login_dialog;
+    QWidget             *namewidget;
+    QHBoxLayout         *hbox;
+    QThread             *thread;
 public slots:
     void            neweditdialog();
     void            on_login_out();
@@ -76,8 +97,14 @@ public slots:
     void            finished_load(int ret);
     void            on_switch_button(int on,int id);
     void            on_auto_syn(int on,int id);
+    void            edit_lost();
+    void            login_lost();
+    void            download_files();
+    void            push_files();
+    void            download_over();
+    void            push_over();
 signals:
-    void sent_to_thread(libkylinssoclient *cl);
+    void on_login_process();
 };
 
 #endif // CONFIG_LIST_WIDGET_H

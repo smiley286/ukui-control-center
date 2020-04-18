@@ -1,3 +1,22 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ *
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ */
 #include "ql_combobobx.h"
 
 ql_combobobx::ql_combobobx(QWidget *parent) : QWidget(parent)
@@ -6,7 +25,7 @@ ql_combobobx::ql_combobobx(QWidget *parent) : QWidget(parent)
     lineedit = new QLineEdit(this);
     pushbutton = new QPushButton(this);
     popup = new ql_popup(this);
-    listwidget = new QListWidget;
+    listwidget = new QListWidget(this);
     editcontrol = new QHBoxLayout;
     popupcontrol = new QVBoxLayout;
     comboboxcontrol = new QVBoxLayout;
@@ -85,8 +104,8 @@ void ql_combobobx::closepopup(QListWidgetItem *item) {
 }
 
 void ql_combobobx::addItem(QString country, QString code) {
-    QListWidgetItem* widgetItem = new QListWidgetItem;
-    ql_box_item *wgt = new ql_box_item;
+    QListWidgetItem* widgetItem = new QListWidgetItem(listwidget);
+    ql_box_item *wgt = new ql_box_item(this);
 
     wgt->set_code(country);
     wgt->set_country_code(code);

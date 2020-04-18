@@ -1,3 +1,22 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ *
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ */
 #include "logindialog.h"
 
 LoginDialog::LoginDialog(QWidget *parent) : QWidget(parent) {
@@ -9,24 +28,24 @@ LoginDialog::LoginDialog(QWidget *parent) : QWidget(parent) {
     vlayout_p = new QVBoxLayout;
     waylayout = new QVBoxLayout;
     stack_widget = new QStackedWidget(this);
-    widget_number = new QWidget;
-    widget_phone = new QWidget;
+    widget_number = new QWidget(this);
+    widget_phone = new QWidget(this);
 
     HBox_forget = new QHBoxLayout;
     HBox_forgett = new QHBoxLayout;
 
-    account_phone = new QLineEdit;
+    account_phone = new QLineEdit(this);
 
     account_pass = new QLineEdit(widget_number);
-    forgot_pass_btn = new QPushButton(tr("忘记密码"));
+    forgot_pass_btn = new QPushButton(tr("Forget"),this);
 
     valid_code = new QLineEdit(widget_phone);
-    send_msg_submit = new QPushButton(tr("发送验证码"),widget_phone);
-    account_login_btn = new QPushButton(tr("账号密码登录"));
-    message_login_btn = new QPushButton(tr("短信快捷登录"));
+    send_msg_submit = new QPushButton(tr("Send"),widget_phone);
+    account_login_btn = new QPushButton(tr("User Sign in"),this);
+    message_login_btn = new QPushButton(tr("Quick Sign in"),this);
 
-    error_code = new QLabel;
-    error_pass = new QLabel;
+    error_code = new QLabel(this);
+    error_pass = new QLabel(this);
 
     mcode = new mcode_widget(widget_number);
     mcode_lineedit = new QLineEdit(widget_number);
@@ -61,8 +80,8 @@ LoginDialog::LoginDialog(QWidget *parent) : QWidget(parent) {
     widget_number->setMinimumSize(338,113);
     widget_number->setContentsMargins(0,0,0,0);
 
-    widget_phone->setMaximumSize(338,36);
-    widget_phone->setMinimumSize(338,36);
+    widget_phone->setMaximumSize(338,80);
+    widget_phone->setMinimumSize(338,80);
     widget_phone->setContentsMargins(0,0,0,0);
 
     account_login_btn->setMaximumSize(90,36);
@@ -80,19 +99,20 @@ LoginDialog::LoginDialog(QWidget *parent) : QWidget(parent) {
     account_login_btn->setFocusPolicy(Qt::NoFocus);
     message_login_btn->setFocusPolicy(Qt::NoFocus);
 
-    account_phone->setMaxLength(11);
+    account_phone->setMaxLength(30);
     account_phone->setMaximumSize(338,36);
     account_phone->setMinimumSize(338,36);
     account_phone->setTextMargins(16,0,0,0);
     account_phone->setFocusPolicy(Qt::StrongFocus);
-    account_phone->setPlaceholderText(tr("用户名"));
+    account_phone->setPlaceholderText(tr("Your account here"));
 
     account_phone->setStyleSheet("QLineEdit{background-color:#F4F4F4;border-radius: 4px;border:1px none #3D6BE5;font-size: 14px;color: rgba(0,0,0,0.85);}"
                                  "QLineEdit:hover{background-color:#F4F4F4;border-radius: 4px;border:1px solid #3D6BE5;font-size: 14px;color:rgba(0,0,0,0.85)}"
                                  "QLineEdit:focus{background-color:#F4F4F4;border-radius: 4px;border:1px solid #3D6BE5;font-size: 14px;color:rgba(0,0,0,0.85)}");
 
+    mcode_lineedit->setMaxLength(4);
     mcode_lineedit->setTextMargins(16,0,0,0);
-    mcode_lineedit->setPlaceholderText("输入验证码");
+    mcode_lineedit->setPlaceholderText(tr("Your code here"));
     mcode_lineedit->setStyleSheet("QLineEdit{background-color:#F4F4F4;border-radius: 4px;border:1px none #3D6BE5;font-size: 14px;color: rgba(0,0,0,0.85);}"
                                   "QLineEdit:hover{background-color:#F4F4F4;border-radius: 4px;border:1px solid #3D6BE5;font-size: 14px;color:rgba(0,0,0,0.85)}"
                                   "QLineEdit:focus{background-color:#F4F4F4;border-radius: 4px;border:1px solid #3D6BE5;font-size: 14px;color:rgba(0,0,0,0.85)}");
@@ -129,7 +149,9 @@ LoginDialog::LoginDialog(QWidget *parent) : QWidget(parent) {
    //Subabstract Build
     login_account_thr_number();
     login_account_thr_phone();
-
+    QRegExp regx("^[a-zA-Z0-9_-]{30}$");
+    QValidator *validator = new QRegExpValidator(regx, account_phone );
+    account_phone->setValidator(validator);
     //Initial configuration
     stack_widget->setCurrentIndex(0);
     //qDebug()<<stack_widget->currentIndex();
@@ -137,6 +159,13 @@ LoginDialog::LoginDialog(QWidget *parent) : QWidget(parent) {
 
 void LoginDialog::startaction_1() {
     if(stack_widget->currentIndex() == 0) {
+        set_clear();
+        account_phone->setFocus();
+        account_phone->setText("");
+        account_phone->setMaxLength(11);
+        QRegExp regx("^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$");
+        QValidator *validator = new QRegExpValidator(regx, account_phone );
+        account_phone->setValidator(validator);
         account_login_btn->setMaximumSize(90,36);
         account_login_btn->setMinimumSize(90,36);
         //account_login_btn->setGeometry(31 + sizeoff,96 + sizeoff,90,36);
@@ -153,17 +182,16 @@ void LoginDialog::startaction_1() {
         message_login_btn->setFocusPolicy(Qt::NoFocus);
 
         stack_widget->setCurrentIndex(1);
-        account_phone->setPlaceholderText(tr("手机号码"));
+        account_phone->setPlaceholderText(tr("Your phone number here"));
     }
-    qDebug()<<"2'13212312";
 }
 
 void LoginDialog::set_window1() {
-    emit startaction_1();
+    startaction_1();
 }
 
 void LoginDialog::set_window2() {
-    emit startaction_2();
+    startaction_2();
 }
 
 QString LoginDialog::get_user_name() {
@@ -176,6 +204,12 @@ QString LoginDialog::get_user_pass() {
 
 void LoginDialog::startaction_2() {
     if(stack_widget->currentIndex() == 1) {
+        set_clear();
+        account_phone->setFocus();
+        QRegExp regx("^[a-zA-Z0-9_-]{30}$");
+        account_phone->setMaxLength(30);
+        QValidator *validator = new QRegExpValidator(regx, account_phone );
+        account_phone->setValidator(validator);
         account_login_btn->setMaximumSize(90,36);
         account_login_btn->setMinimumSize(90,36);
         //account_login_btn->setGeometry(31 + sizeoff,96 + sizeoff,90,36);
@@ -191,20 +225,25 @@ void LoginDialog::startaction_2() {
         account_login_btn->setFocusPolicy(Qt::NoFocus);
         message_login_btn->setFocusPolicy(Qt::NoFocus);
         stack_widget->setCurrentIndex(0);
-        account_phone->setPlaceholderText(tr("用户名"));
+        account_phone->setPlaceholderText(tr("Your account here"));
     }
 }
+
 
 bool LoginDialog::login_account_thr_number() {
     //Fill the container and allocation
 
     //Congfigurate the widgets
     account_phone->setFocus();
+    QRegExp regx("^[a-zA-Z0-9_-]{30}$");
+    QValidator *validator = new QRegExpValidator(regx, account_phone );
+    account_phone->setValidator(validator);
 
-    account_pass->setPlaceholderText(tr("输入密码"));
+    account_pass->setPlaceholderText(tr("Your password here"));
     account_pass->setMaximumSize(338,36);
     account_pass->setMinimumSize(338,36);
     account_pass->setTextMargins(16,0,0,0);
+    account_pass->setMaxLength(30);
     account_pass->setStyleSheet("QLineEdit{background-color:#F4F4F4;border-radius: 4px;border:1px none #3D6BE5;font-size: 14px;color: rgba(0,0,0,0.85);lineedit-password-character: 42;}"
                                 "QLineEdit:hover{background-color:#F4F4F4;border-radius: 4px;border:1px solid #3D6BE5;font-size: 14px;color:rgba(0,0,0,0.85)}"
                                 "QLineEdit:focus{background-color:#F4F4F4;border-radius: 4px;border:1px solid #3D6BE5;font-size: 14px;color:rgba(0,0,0,0.85)}");
@@ -236,6 +275,11 @@ bool LoginDialog::login_account_thr_number() {
     mcode_layout->addWidget(mcode,0,Qt::AlignRight);
     mcode_layout->setSpacing(0);
     mcode_layout->setContentsMargins(0,8,0,8);
+
+    QRegExp regx_code("[0-9]+$");
+    QValidator *validator_code = new QRegExpValidator(regx_code, mcode_lineedit );
+    mcode_lineedit->setValidator( validator_code );
+
     HBox_forget->addWidget(error_pass,0,Qt::AlignLeft);
     HBox_forget->setContentsMargins(0,8,0,8);
     HBox_forget->setSpacing(0);
@@ -316,9 +360,15 @@ bool LoginDialog::login_account_thr_phone() {
 
     //Congfigurate the widgets
     account_phone->setFocus();
-
+    QRegExp regx("^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$");
+    QValidator *validator = new QRegExpValidator(regx, account_phone );
+    account_phone->setValidator(validator);
     valid_code->setMaximumSize(192,36);
-    valid_code->setPlaceholderText(tr("输入验证码"));
+    valid_code->setMaxLength(4);
+    valid_code->setPlaceholderText(tr("Your code here"));
+    QRegExp regx_code("[0-9]+$");
+    QValidator *validator_code = new QRegExpValidator(regx_code, valid_code );
+    valid_code->setValidator( validator_code );
     send_msg_submit->setMaximumSize(130,36);
     valid_code->setMinimumSize(192,36);
     send_msg_submit->setMinimumSize(130,36);
@@ -336,15 +386,17 @@ bool LoginDialog::login_account_thr_phone() {
     QWidget::setTabOrder(account_phone, valid_code);
 
     //Layout
-    HBox_forget->addWidget(error_code,0,Qt::AlignRight);
-    HBox_forgett->addWidget(valid_code,0,Qt::AlignLeft);
+    HBox_forgett->addWidget(valid_code);
     HBox_forgett->setSpacing(0);
     HBox_forgett->setMargin(0);
     HBox_forgett->addSpacing(16);
-    HBox_forgett->addWidget(send_msg_submit,0,Qt::AlignLeft);
+    HBox_forgett->addWidget(send_msg_submit);
+    HBox_forgett->setAlignment(Qt::AlignLeft| Qt::AlignTop);
     send_msg_submit->setContentsMargins(0,0,0,0);
     valid_code->setContentsMargins(0,0,0,0);
     vlayout_p->addLayout(HBox_forgett);
+    vlayout_p->addWidget(error_code);
+    vlayout_p->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     vlayout_p->setMargin(0);
     vlayout_p->setSpacing(0);
     widget_phone->setLayout(vlayout_p);
@@ -354,4 +406,17 @@ bool LoginDialog::login_account_thr_phone() {
 
     //Update Widgets
     return false;
+}
+
+void LoginDialog::set_clear() {
+    if(!error_code->isHidden()) {
+        error_code->hide();
+    }
+    if(!error_pass->isHidden()) {
+        error_pass->hide();
+    }
+    account_pass->setText("");
+    account_phone->setText("");
+    valid_code->setText("");
+    mcode_lineedit->setText("");
 }

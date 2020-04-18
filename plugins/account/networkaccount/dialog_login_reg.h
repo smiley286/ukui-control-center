@@ -1,3 +1,22 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ *
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ */
 #ifndef DIALOG_LOGIN_REG_H
 #define DIALOG_LOGIN_REG_H
 
@@ -27,13 +46,16 @@ class Dialog_login_reg : public QWidget
     Q_OBJECT
 public:
     explicit        Dialog_login_reg(QWidget *parent = nullptr);
-    const           QStringList status = {tr("登录云账户"),tr("注册云账户")};
+    QString         status = tr("Sign in Cloud");
     int             timerout_num = 60;
     int             timerout_num_reg = 60;
     int             timerout_num_log = 60;
     QString         messagebox(int code);
     void            set_client(libkylinssoclient *c);
     QPushButton     *get_login_submit();
+    bool            retok = true;
+    void            setclear();
+    void            setshow(QWidget *w);
 
 public slots:
     void linked_forget_btn();
@@ -43,18 +65,19 @@ public slots:
     void on_login_btn();
     void on_pass_btn();
     void on_reg_btn();
-    int on_login_finished(int ret);
-    int on_pass_finished(int ret);
-    int on_reg_finished(int ret);
-    int on_get_mcode_by_name(int ret);
-    int on_get_mcode_by_phone(int ret);
-    void setshow(QWidget *w);
+    void on_login_finished(int ret);
+    void on_pass_finished(int ret);
+    void on_reg_finished(int ret);
+    void on_get_mcode_by_name(int ret);
+    void on_get_mcode_by_phone(int ret);
     void on_timer_timeout();
     void on_send_code();
     void on_send_code_reg();
     void on_send_code_log();
     void on_timer_reg_out();
     void on_timer_log_out();
+    void on_close();
+    void cleanconfirm(QString str);
 protected:
     void            paintEvent(QPaintEvent *event);
     void            mousePressEvent(QMouseEvent *event);
@@ -75,11 +98,20 @@ private:
     RegDialog       *box_reg;
     QLabel          *user_tip;
     QLabel          *pass_tip;
+    QLabel          *pass_tips;
+    QLabel          *reg_tips;
     QLineEdit       *reg_pass;
     QLineEdit       *reg_user;
     QLineEdit       *login_pass;
     QLineEdit       *valid_code;
     QLineEdit       *phone_user;
+    QLineEdit       *pass_user;
+    QLineEdit       *pass_confirm;
+    QLineEdit       *pass_pwd;
+    QLineEdit       *pass_code;
+    QLineEdit       *login_mcode;
+    QLineEdit       *login_user;
+    QLineEdit       *reg_confirm;
     QLabel          *passlabel;
     QLineEdit       *login_code;
     QLabel          *codelable;
@@ -94,10 +126,13 @@ private:
     QWidget         *log_reg;
     QStackedWidget  *basewidegt;
     SuccessDiaolog  *succ;
+    bool            send_is_ok = false;
+    bool            send_is_ok_log = false;
+    bool            send_is_ok_reg = false;
 
 signals:
     void on_login_success();
-    void on_login_process();
+    void on_allow_send();
 };
 
 #endif // DIALOG_LOGIN_REG_H

@@ -1,16 +1,35 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ *
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ */
 #include "passdialog.h"
 
 PassDialog::PassDialog(QWidget *parent) : QWidget(parent)
 {
-    reg_phone = new QLineEdit;
-    reg_pass_confirm = new QLineEdit;
-    reg_pass = new QLineEdit;
-    valid_code = new QLineEdit;
-    send_msg_btn = new QPushButton(tr("获取绑定手机验证码"));
+    reg_phone = new QLineEdit(this);
+    reg_pass_confirm = new QLineEdit(this);
+    reg_pass = new QLineEdit(this);
+    valid_code = new QLineEdit(this);
+    send_msg_btn = new QPushButton(tr("Get the phone binding code"),this);
 
     vlayout = new QVBoxLayout;
     hlayout = new QHBoxLayout;
-    tips = new QLabel;
+    tips = new QLabel(this);
     QString str = ("QLineEdit{background-color:#F4F4F4;border-radius: 4px;border:1px none #3D6BE5;font-size: 14px;color: rgba(0,0,0,0.85);lineedit-password-character: 42;}"
                    "QLineEdit:hover{background-color:#F4F4F4;border-radius: 4px;border:1px solid #3D6BE5;font-size: 14px;color:rgba(0,0,0,0.85)}"
                    "QLineEdit:focus{background-color:#F4F4F4;border-radius: 4px;border:1px solid #3D6BE5;font-size: 14px;color:rgba(0,0,0,0.85)}");
@@ -23,12 +42,12 @@ PassDialog::PassDialog(QWidget *parent) : QWidget(parent)
     reg_phone->setFocus();
 
 
-    reg_phone->setPlaceholderText(tr("输入账户名"));
-    reg_pass->setPlaceholderText(tr("新设密码"));
+    reg_phone->setPlaceholderText(tr("Your account here"));
+    reg_pass->setPlaceholderText(tr("Your new password here"));
     reg_pass->setEchoMode(QLineEdit::Password);
-    reg_pass_confirm->setPlaceholderText(tr("再次确认"));
+    reg_pass_confirm->setPlaceholderText(tr("Confirm your new password"));
     reg_pass_confirm->setEchoMode(QLineEdit::Password);
-    valid_code->setPlaceholderText(tr("输入验证码"));
+    valid_code->setPlaceholderText(tr("Your code here"));
     valid_code->setMaxLength(4);
 
     reg_phone->setTextMargins(16,0,0,0);
@@ -40,6 +59,14 @@ PassDialog::PassDialog(QWidget *parent) : QWidget(parent)
     QRegExp regx("[0-9]+$");
     QValidator *validator = new QRegExpValidator(regx, valid_code );
     valid_code->setValidator( validator );
+
+    QRegExp regx_acc("^[a-zA-Z0-9_-]{4,16}$");
+    QValidator *validator_acc = new QRegExpValidator(regx_acc, reg_phone );
+    reg_phone->setValidator(validator_acc);
+
+//    QRegExp regx_pas("^[a-zA-Z0-9_-]{4,16}$");
+//    QValidator *validator_pas = new QRegExpValidator(regx_pas, reg_pass );
+//    reg_phone->setValidator(validator_acc);
 
     tips->setText("<html><head/><body><p><img src=':/new/image/_.png'/><span style=' font-size:14px;color:#F53547'>"
                         "&nbsp;&nbsp;"+code+"</span></p></body></html>");
@@ -59,15 +86,17 @@ PassDialog::PassDialog(QWidget *parent) : QWidget(parent)
     hlayout->setSpacing(16);
     hlayout->addWidget(valid_code);
     hlayout->addWidget(send_msg_btn);
+    hlayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     vlayout->addLayout(hlayout);
     vlayout->addWidget(tips);
+    vlayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
     send_msg_btn->setFocusPolicy(Qt::NoFocus);
     setLayout(vlayout);
 
+    setFixedHeight(212);
+
     tips->hide();
-    tips->setAttribute(Qt::WA_DontShowOnScreen);
-    this->setFixedHeight(168);
 
     connect(valid_code,SIGNAL(textChanged(QString)),this,SLOT(change_uppercase()));
     connect(this,SIGNAL(code_changed()),this,SLOT(setstyleline()));
@@ -122,4 +151,18 @@ QLineEdit* PassDialog::get_reg_pass_confirm() {
 
 QLineEdit* PassDialog::get_valid_code() {
     return valid_code;
+}
+
+void PassDialog::set_clear() {
+    if(!tips->isHidden()) {
+        tips->hide();
+    }
+    reg_pass->setText("");
+    reg_phone->setText("");
+    reg_pass_confirm->setText("");
+    valid_code->setText("");
+}
+
+QLabel* PassDialog::get_tips() {
+    return tips;
 }

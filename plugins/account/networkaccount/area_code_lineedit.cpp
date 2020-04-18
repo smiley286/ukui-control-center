@@ -21,7 +21,7 @@
 
 
 void area_code_lineedit::InittoCountrycode() {
-    loadfile = new QFile(":/country.json");
+    loadfile = new QFile(":/country.json",this);
     if(!loadfile->open(QIODevice::ReadOnly)) {
         qDebug() <<"Open fail!";
         return ;
@@ -79,7 +79,7 @@ area_code_lineedit::area_code_lineedit(QWidget *parent) : QLineEdit(parent)
     vertical_line->setLineWidth(1);
     vertical_line->setFixedHeight(14);
     vertical_line->setStyleSheet("color:#CCCCCC");
-    setPlaceholderText(tr("Your register phone number here"));
+    setPlaceholderText(tr("Sign up by Phone"));
 
     //Set Layout
 
