@@ -216,8 +216,8 @@ void Fonts::setupStylesheet(){
 void Fonts::setupComponent(){
 
     QStringList fontScale;
-    fontScale<< tr("11") << tr("12") << tr("13") << tr("14") << tr("15")
-              <<tr("16") << tr("17") << tr("18");
+    fontScale << tr("10") << tr("11") << tr("12") << tr("13") << tr("14") << tr("15")
+              <<tr("16") << tr("17");
 
     uslider  = new Uslider(fontScale);
     uslider->setRange(1,8);
@@ -297,8 +297,12 @@ void Fonts::setupComponent(){
         if (size >=11 && size <= 18)
             ui->titleSizeComBox->addItem(QString::number(size));
     }
+
+    //高级字体不再显示
+    ui->advancedBtn->hide();
+    ui->advancedFrame->hide();
     //设置高级配置是否显示
-    ui->advancedFrame->setVisible(ui->advancedBtn->isChecked());
+//    ui->advancedFrame->setVisible(ui->advancedBtn->isChecked());
 
     //init sample button
     FontEffects example1;
