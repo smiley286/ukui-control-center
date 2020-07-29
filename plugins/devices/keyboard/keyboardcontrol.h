@@ -59,6 +59,8 @@ public:
     void initGeneralStatus();
     void rebuildLayoutsComBox();
 
+    void refreshRepeatStatus();
+
 protected:
 //    bool eventFilter(QObject *watched, QEvent *event);
 

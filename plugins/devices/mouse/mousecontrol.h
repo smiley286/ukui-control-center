@@ -76,6 +76,8 @@ public:
     int _get_mouse_mid_speed();
     void _set_mouse_mid_speed(int value);
 
+    void refreshCursorStatus();
+
 private:
     Ui::MouseControl *ui;
 

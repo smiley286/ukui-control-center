@@ -192,6 +192,7 @@ void KeyboardControl::setupComponent(){
 void KeyboardControl::setupConnect(){
     connect(keySwitchBtn, &SwitchButton::checkedChanged, this, [=](bool checked){
         settings->set(REPEAT_KEY, checked);
+        refreshRepeatStatus();
     });
 
     connect(ui->delayHorSlider, &QSlider::valueChanged, this, [=](int value){
@@ -241,6 +242,7 @@ void KeyboardControl::setupConnect(){
 void KeyboardControl::initGeneralStatus(){
     //设置按键重复状态
     keySwitchBtn->setChecked(settings->get(REPEAT_KEY).toBool());
+    refreshRepeatStatus();
 
     //设置按键重复的延时
     ui->delayHorSlider->setValue(settings->get(DELAY_KEY).toInt());
@@ -269,6 +271,18 @@ void KeyboardControl::rebuildLayoutsComBox(){
         ui->layoutsComBox->setVisible(false);
     } else {
         ui->layoutsComBox->setVisible(true);
+    }
+}
+
+void KeyboardControl::refreshRepeatStatus(){
+    if (keySwitchBtn->isChecked()){
+        ui->repeatFrame_1->show();
+        ui->repeatFrame_2->show();
+        ui->repeatFrame_3->show();
+    } else {
+        ui->repeatFrame_1->hide();
+        ui->repeatFrame_2->hide();
+        ui->repeatFrame_3->hide();
     }
 }
 

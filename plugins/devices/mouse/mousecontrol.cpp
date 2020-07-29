@@ -251,6 +251,7 @@ void MouseControl::setupComponent(){
 
     connect(flashingBtn, &SwitchButton::checkedChanged, [=](bool checked){
         desktopSettings->set(CURSOR_BLINK_KEY, checked);
+        refreshCursorStatus();
     });
 
     connect(ui->midHorSlider, &QSlider::sliderReleased, [=]{
@@ -317,6 +318,14 @@ void MouseControl::initPointerStatus(){
     ui->pointerSizeComBox->blockSignals(false);
 }
 
+void MouseControl::refreshCursorStatus(){
+    if (flashingBtn->isChecked()){
+        ui->cursorSpeedFrame->show();
+    } else {
+        ui->cursorSpeedFrame->hide();
+    }
+}
+
 void MouseControl::initCursorStatus(){
     flashingBtn->blockSignals(true);
     flashingBtn->setChecked(desktopSettings->get(CURSOR_BLINK_KEY).toBool());
@@ -325,6 +334,8 @@ void MouseControl::initCursorStatus(){
     ui->cursorSpeedSlider->blockSignals(true);
     ui->cursorSpeedSlider->setValue(desktopSettings->get(CURSOR_BLINK_TIME_KEY).toInt());
     ui->cursorSpeedSlider->blockSignals(false);
+
+    refreshCursorStatus();
 }
 
 void MouseControl::initWheelStatus(){

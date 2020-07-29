@@ -208,7 +208,7 @@ Widget::Widget(QWidget *parent)
     loadQml();
     setBrigthnessFile();
     //亮度调节UI
-//    initBrightnessUI();
+    initBrightnessUI();
 }
 
 Widget::~Widget()
